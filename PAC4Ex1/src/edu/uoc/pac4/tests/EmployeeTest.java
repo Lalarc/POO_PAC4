@@ -148,7 +148,7 @@ class EmployeeTest {
 			fail("set failed");
 		}
 		
-		Exception ex = assertThrows(Exception.class, () ->	employee.setBirthYear(2004));
+		Exception ex = assertThrows(Exception.class, () ->	employee.setBirthYear(2005));
 		assertEquals(EmployeeException.MSG_ERR_AGE, ex.getMessage());
 		assertEquals(1970,employee.getBirthYear());
 		
@@ -210,6 +210,6 @@ class EmployeeTest {
 	
 	@Test
 	void testToString() {	
-		assertEquals("Name: Lorem Ipsum\nAge: 39\nEmail: lorem@uoc.edu\nEducation level: UNDEFINED",employee.toString());
+		assertEquals("Name: Lorem Ipsum\nAge: 40\nEmail: lorem@uoc.edu\nEducation level: UNDEFINED",employee.toString());
 	}
 }

@@ -3,7 +3,7 @@ package edu.uoc.pac4;
 import java.time.LocalDate;
 
 /**
- * @author Fran
+ * @author Luis
  * @version 1.0
  *
  * This class represents a employee of a company
@@ -54,8 +54,10 @@ public class Employee {
 	 *  birthYear = 1982
 	 *  @throws Exception is never thrown because the values of the fields are correct	  
 	 */
-	public Employee() throws Exception {
-		this("Lorem Ipsum", "Sesame Street", 50000, "lorem@uoc.edu", 1982);
+	private EducationLevel level;
+	
+	public Employee() throws EmployeeException {
+		this("Lorem Ipsum", "Sesame Street", 50000, "lorem@uoc.edu", 1982, EducationLevel.UNDEFINED);
 	}
 
 	/**
@@ -67,12 +69,13 @@ public class Employee {
 	 * @param birthYear  Employee's year born (>= 18 years old)
 	 * @throws Exception when name has more than 50 chars, or salary is out of [13300, 50000], or email not contains '@' or birthYear is smaller than 18
 	 */
-	public Employee(String name, String street, double salary, String email, int birthYear) throws Exception {
+	public Employee(String name, String street, double salary, String email, int birthYear, EducationLevel level) throws EmployeeException {
 		setName(name);
 		setStreet(street);
 		setSalary(salary);
 		setEmail(email);
 		setBirthYear(birthYear);
+		setLevel(level);
 		setId();
 	}
 
@@ -120,9 +123,9 @@ public class Employee {
 	 * @param name New name that we want to assign to the employee
 	 * @throws Exception When the new name has more than 50 characters
 	 */
-	public void setName(String name) throws Exception {
+	public void setName(String name) throws EmployeeException {
 		if(name.length()>50) {
-			throw new Exception("[ERROR] Employee's name cannot be longer than 50 characters");
+			throw new EmployeeException(EmployeeException.MSG_ERR_NAME);
 		}else {
 			this.name = name;
 		}
@@ -157,9 +160,9 @@ public class Employee {
 	 * @param salary New salary that we want to assign to the employee
 	 * @throws Exception When the new salary is out of the range [13300,60000]	
 	 */
-	public void setSalary(double salary) throws Exception {
+	public void setSalary(double salary) throws EmployeeException {
 		if(salary<13300 || salary>60000) {
-			throw new Exception("[ERROR] Employee's salary must be in range [13300,60000]");
+			throw new EmployeeException(EmployeeException.MSG_ERR_SALARY);
 		}else {
 			this.salary = salary;
 		}
@@ -178,10 +181,10 @@ public class Employee {
 	 * @param email New email that we want to assign to the employee
 	 * @throws Exception When the new email not contains '@'
 	 */
-	public void setEmail(String email) throws Exception {
+	public void setEmail(String email) throws EmployeeException {
 		
 		if(!email.contains("@")) {
-			throw new Exception("[ERROR] Employee's email does not have the correct format");
+			throw new EmployeeException(EmployeeException.MSG_ERR_EMAIL);
 		}else {
 			this.email = email;
 		}
@@ -200,12 +203,49 @@ public class Employee {
 	 * @param birthYear capacity New birthYear that we want to assign to the employee
 	 * @throws Exception When the new birthYear is smaller than 18
 	 */
-	public void setBirthYear(int birthYear) throws Exception {
+	public void setBirthYear(int birthYear) throws EmployeeException {
 		if(birthYear > LocalDate.now().getYear()-18) {	
-			throw new Exception("[ERROR] Employee's age must be greater than or equal to 18 years old");
+			throw new EmployeeException(EmployeeException.MSG_ERR_AGE);
 		}else {
 			this.birthYear = birthYear;
 		}
+	}
+	
+	public EducationLevel getLevel() {
+		return level;
+	}
+	
+	public void setLevel(EducationLevel level) {
+		this.level = level;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this==obj) {
+			return true;
+		}
+		
+		Employee employee = (Employee) obj;
+		
+		if(this.name==employee.name
+		&&this.street==employee.street
+		&&this.salary==employee.salary
+		&&this.email==employee.email
+		&&this.birthYear==employee.birthYear
+		&&this.level==employee.level) {
+			return true;
+		}
+		
+		return false;	
+	}
+	
+	@Override
+	public String toString() {
+		return "Name: "+name+
+			   "\nAge: "+(LocalDate.now().getYear()-birthYear)+
+			   "\nEmail: "+email+
+			   "\nEducation level: "+level;
+		
 	}
 	
 }
